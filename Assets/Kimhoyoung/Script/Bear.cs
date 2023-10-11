@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ public class Bear : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.RotateAround(target.position, Vector3.down, speed * Time.deltaTime);
+        // transform.RotateAround(target.position, Vector3.down, speed * Time.deltaTime);
+        gameObject.transform.position = new Vector3(math.cos(10) * 5, 0, math.sin(10) * 5);
     }
 }
