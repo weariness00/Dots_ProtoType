@@ -8,7 +8,6 @@ public class movecube : MonoBehaviour
     private float angle = 0f;
 
     public float Speed;
-
     public float Radian;
 
     // Start is called before the first frame update

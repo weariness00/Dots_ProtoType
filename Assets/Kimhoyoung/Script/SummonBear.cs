@@ -4,24 +4,18 @@ using UnityEngine;
 
 public class SommonBear : MonoBehaviour
 {
-    public Bear bear;
-    public Transform startPos;
-    public Transform targetPos;
+    public GameObject prefab;
+
     public int summonNum;
-    void Start()
-    {
-        
-    }
-    
+    public int minRad;
+    public int maxRad;
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        for (int i = 0; i < summonNum; i++)
         {
-            for (int i = 0; i < summonNum; i++)
-            {
-                var prefab = Instantiate(bear.gameObject, startPos.position, Quaternion.Euler(0f, 0f, 0f));
-                prefab.GetComponent<Bear>().target = targetPos;
-            }
+            GameObject pref = Instantiate(prefab, Vector3.zero, Quaternion.Euler(0f, 0f, 0f));
+            pref.GetComponent<Bear>().Radian = Random.Range(minRad, maxRad);
         }
     }
 }

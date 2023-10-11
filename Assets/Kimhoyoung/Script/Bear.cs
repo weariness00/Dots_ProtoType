@@ -1,28 +1,24 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Bear : MonoBehaviour
 {
-    public Transform target;
-    public int speed;
-    public static Bear Instance;
+    private float angle = 0f;
+    public float Speed;
+    public float Radian;
 
-    private void Start()
+    // Start is called before the first frame update
+    void Start()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        // transform.RotateAround(target.position, Vector3.down, speed * Time.deltaTime);
-        gameObject.transform.position = new Vector3(math.cos(10) * 5, 0, math.sin(10) * 5);
+        angle += Time.deltaTime * Speed;
+        gameObject.transform.position = new Vector3(math.cos(angle) * Radian, 0, math.sin(angle) * Radian);
     }
 }

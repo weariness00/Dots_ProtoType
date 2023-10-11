@@ -20,5 +20,6 @@ public class makecube : MonoBehaviour
         {
             Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.Euler(0f, 0f, 0f));
         }
+        
     }
 }
