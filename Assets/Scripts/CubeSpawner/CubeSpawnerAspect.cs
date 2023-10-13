@@ -5,7 +5,7 @@ using Unity.Transforms;
 
 namespace Game
 {
-    public readonly partial struct NoteSpawnerAspect : IAspect
+    public readonly partial struct CubeSpawnerAspect : IAspect
     {
         public readonly Entity Entity;
 

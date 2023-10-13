@@ -13,7 +13,11 @@ namespace Game
         // Component에서는 
         public Entity CubeEntity;
         
-        public int CubeCount;
-        public int Radian;
+        public int SpawnCubeCount;
+        public int FirstCubeCount;
+        public int SpawnedCubeCount;
+        public float Radian;
+        public float Speed;
+        
     }
 }

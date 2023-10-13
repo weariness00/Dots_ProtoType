@@ -8,8 +8,10 @@ namespace Game
     {
         public float3 Position;
         public GameObject CubeObject;
-        public int CubeCount;
-        public int Radian;
+        public int SpawnCubeCount;
+        public int SpawnedCubeCount;
+        public float Radian;
+        public float Speed;
     }
 
     public class CubeSpawnerBaker : Baker<CubeSpawnerMono>
@@ -22,8 +24,10 @@ namespace Game
             AddComponent(entity, new CubeSpawnerAuthoring()
             {
                 CubeEntity = GetEntity(authoring.CubeObject,TransformUsageFlags.Dynamic),
-                CubeCount = authoring.CubeCount,
+                SpawnCubeCount = authoring.SpawnCubeCount,
+                SpawnedCubeCount = authoring.SpawnedCubeCount,
                 Radian = authoring.Radian,
+                Speed = authoring.Speed,
             });
         }
     }
