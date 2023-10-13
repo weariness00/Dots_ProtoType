@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 8598891937908648850}
   - component: {fileID: 7563391120589636133}
   - component: {fileID: 912716325572819925}
-  - component: {fileID: -1830860197890002471}
-  - component: {fileID: -8999281451962256592}
+  - component: {fileID: 3762368550190753299}
+  - component: {fileID: 9062574623626105681}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -85,28 +85,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!95 &-1830860197890002471
-Animator:
-  serializedVersion: 5
+--- !u!114 &3762368550190753299
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5604458140228962186}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 3171c80395a3b8c448e1a39043dcb68a, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-8999281451962256592
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19186913ea984fa44aca07ec96d86964, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Speed: 1
+  Radian: 0
+--- !u!114 &9062574623626105681
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -119,4 +112,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 1
-  Radian: 3
