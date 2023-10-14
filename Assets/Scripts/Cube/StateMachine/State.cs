@@ -1,10 +1,10 @@
 ﻿
 namespace Game
 {
-    public class State
+    public interface IState
     {
-        public virtual void Enter() { }
-        public virtual void Execute() { }
-        public virtual void Exit() { }
+        void Enter(){}
+        void Execute(){}
+        void Exit(){}
     }
 }

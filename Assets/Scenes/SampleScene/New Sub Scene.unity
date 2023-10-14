@@ -171,9 +171,9 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
-  CubeObject: {fileID: 9048380753778150787, guid: 5850b612dc12995449139f76f689b580,
+  CubeObject: {fileID: 7562970664165899029, guid: 791093a495dc25b4690375abc4e00e33,
     type: 3}
-  SpawnCubeCount: 100
+  SpawnCubeCount: 1000
   SpawnedCubeCount: 0
   Radian: 1
   Speed: 10

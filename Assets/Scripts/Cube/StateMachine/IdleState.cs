@@ -2,14 +2,11 @@
 
 namespace Game
 {
-    public class IdleState : State
+    public class IdleState : IState
     {
-        private IdleState() { } 
-        ~IdleState() { }
-        
-        public virtual void Enter() { Debug.Log("Enter IdleState");}
-        public virtual void Execute() { Debug.Log("Execute IdleState");}
-        public virtual void Exit() { Debug.Log("Exit IdleState");}
+        public void Enter() { Debug.Log("Enter IdleState");}
+        public void Execute() { Debug.Log("Execute IdleState");}
+        public void Exit() { Debug.Log("Exit IdleState");}
     }
 
 }

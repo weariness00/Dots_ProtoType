@@ -2,8 +2,10 @@
 
 namespace Game
 {
-    public struct CubeStateMachine : IComponentData
+    public class CubeStateMachine : IComponentData
     {
-        //public State CurrentState = ;
+        public IState CurrentState = new IdleState();
+        
+        
     }
 }
