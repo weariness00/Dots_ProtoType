@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace StateMachine
 {
-    public class CubeStateMachine : IComponentData
+    public class StateMachine : ICleanupComponentData
     {
         public IState CurrentState;
         public IState PreviousState;

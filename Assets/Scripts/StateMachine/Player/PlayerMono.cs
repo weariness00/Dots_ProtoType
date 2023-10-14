@@ -5,7 +5,7 @@ namespace StateMachine
 {
     public class PlayerMono : MonoBehaviour
     {
-
+        
     }
     
     public class PlayerMonoBaker : Baker<PlayerMono>
@@ -15,6 +15,7 @@ namespace StateMachine
             var playerEntity = GetEntity(authoring.gameObject, TransformUsageFlags.Dynamic);
             
             AddComponent<PlayerTag>(playerEntity);
+            SystemAPI.ManagedAPI.GetComponent<StateMachine>(playerEntity);
         }
     }
 }
