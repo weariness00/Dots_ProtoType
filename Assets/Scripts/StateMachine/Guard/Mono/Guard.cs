@@ -15,16 +15,24 @@ namespace StateMachine
 
             AddComponent<GuardTag>(guardEntity);
 
-            EntityManager EM;
+            var EM = World.DefaultGameObjectInjectionWorld.EntityManager;
             var Buffer = EM.GetBuffer<WaypointPosition>(guardEntity);
             
             AddComponent(guardEntity, new GuardAuthoring()
             {
-                    
             });
             
             AddComponent(guardEntity, new GuardAIUtility());
-            AddComponent(guardEntity, new TargetPosition());
+            AddComponent(guardEntity, new TargetPosition()
+            {
+                Value = Buffer[0].Value,
+            });
+
+            AddComponent(guardEntity, new MovementSpeed()
+            {
+                MeterPerSecond = authoring.MovementSpeedMetersPerSecond,
+            });
+            
             AddComponent(guardEntity, new WaypointPosition()
             {
 
