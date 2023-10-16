@@ -15,10 +15,10 @@ namespace StateMachine
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var playerEntity = SystemAPI.GetSingletonEntity<PlayerTag>();
-            var PlayerState = SystemAPI.ManagedAPI.GetComponent<StateMachine>(playerEntity);
-            
-            PlayerState.CurrentState = new IdleState();
+            // var playerEntity = SystemAPI.GetSingletonEntity<PlayerTag>();
+            // var PlayerState = SystemAPI.ManagedAPI.GetComponent<StateMachine>(playerEntity);
+            //
+            // PlayerState.CurrentState = new IdleState();
             // PlayerState.GlobalState = new IdleState();
             // PlayerState.PreviousState = new IdleState();
         }

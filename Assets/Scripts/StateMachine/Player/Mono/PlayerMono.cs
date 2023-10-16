@@ -5,7 +5,7 @@ namespace StateMachine
 {
     public class PlayerMono : MonoBehaviour
     {
-        
+        public float Speed = 5.0f;
     }
     
     public class PlayerMonoBaker : Baker<PlayerMono>
@@ -15,7 +15,11 @@ namespace StateMachine
             var playerEntity = GetEntity(authoring.gameObject, TransformUsageFlags.Dynamic);
             
             AddComponent<PlayerTag>(playerEntity);
-            SystemAPI.ManagedAPI.GetComponent<StateMachine>(playerEntity);
+            AddComponent(playerEntity, new UserInputData());
+            AddComponent(playerEntity, new MovementSpeed()
+            {
+                MeterPerSecond = authoring.Speed,
+            });
         }
     }
 }
