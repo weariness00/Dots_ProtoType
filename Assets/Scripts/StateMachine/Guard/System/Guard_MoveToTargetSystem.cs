@@ -19,11 +19,19 @@ namespace StateMachine
         {
             var deltaTime = Time.deltaTime;
 
-            foreach (var(guardTag, localTransform, targetPosition, movementSpeed) in SystemAPI.Query<GuardTag, RefRW<LocalTransform>, RefRW<TargetPosition>, RefRW<MovementSpeed>>())
+            foreach (var(guardTag, localTransform, guardAuthoring, movementSpeed) in SystemAPI.Query<GuardTag, RefRW<LocalTransform>, RefRW<GuardAuthoring>, RefRW<MovementSpeed>>().WithNone<IdleTimer>())
             {
+                float3 VectorToTarget = new float3(0, 0, 0);
                 //남은 거리
-                var VectorToTarget = targetPosition.ValueRW.Value - localTransform.ValueRW.Position;
-
+                if (guardAuthoring.ValueRW.direction == 0)
+                {
+                    VectorToTarget = guardAuthoring.ValueRW.WayPoints1 - localTransform.ValueRW.Position;
+                }
+                else
+                {
+                    VectorToTarget = guardAuthoring.ValueRW.WayPoints2 - localTransform.ValueRW.Position;
+                }
+                
                 // 도착여부 확인
                 if (math.lengthsq(VectorToTarget) > GuardAIUtility.StopDistanceSq)
                 {

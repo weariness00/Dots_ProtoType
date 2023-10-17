@@ -8,6 +8,9 @@ namespace StateMachine
     
     public struct GuardAuthoring : IComponentData
     {
-        public float3[] WayPoints;
+        public int direction;
+        
+        public float3 WayPoints1;
+        public float3 WayPoints2;
     }
 }

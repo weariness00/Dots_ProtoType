@@ -6,4 +6,10 @@ namespace StateMachine
     {
         public const float StopDistanceSq = 0.4f;
     }
+
+    public struct IdleTimer : IComponentData
+    {
+        public float Value;
+    }  
+    
 }

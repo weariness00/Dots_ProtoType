@@ -14,6 +14,8 @@ namespace StateMachine
         {
             var playerEntity = GetEntity(authoring.gameObject, TransformUsageFlags.Dynamic);
             
+            // AddComponentObject();
+            
             AddComponent<PlayerTag>(playerEntity);
             AddComponent(playerEntity, new UserInputData());
             AddComponent(playerEntity, new MovementSpeed()
