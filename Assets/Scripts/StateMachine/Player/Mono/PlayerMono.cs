@@ -17,6 +17,8 @@ namespace StateMachine
             // AddComponentObject();
             
             AddComponent<PlayerTag>(playerEntity);
+            AddComponent<PlayerIdleStateTag>(playerEntity);
+            
             AddComponent(playerEntity, new UserInputData());
             AddComponent(playerEntity, new MovementSpeed()
             {
