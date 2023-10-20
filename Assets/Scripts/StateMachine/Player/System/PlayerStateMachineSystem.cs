@@ -19,6 +19,7 @@ namespace StateMachine
         {
             var ecb = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
             
+            // 쿼리에 playerTag와 같은 쓸데없는 놈들 넣지마
             foreach (var(playerTag, userInputData, userEntity) in SystemAPI.Query<PlayerTag, RefRW<UserInputData>>().WithNone<PlayerRunStateTag>().WithEntityAccess())
             {
                 if (userInputData.ValueRW.Move.x != 0 || userInputData.ValueRW.Move.y != 0)

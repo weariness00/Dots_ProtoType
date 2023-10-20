@@ -11,8 +11,8 @@ namespace StateMachine
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<PlayerTag>();
-            state.RequireForUpdate<PlayerRunStateTag>();
+            // state.RequireForUpdate<PlayerTag>();
+            // state.RequireForUpdate<PlayerRunStateTag>();
         }
 
         [BurstCompile]
@@ -24,6 +24,9 @@ namespace StateMachine
             {
                 localTransform.ValueRW.Position += new float3(inputData.ValueRW.Move.x, 0.0f, inputData.ValueRW.Move.y) * movementSpeed.ValueRW.MeterPerSecond * deltaTime;
             }
+
+            // state.Enabled = false;  // player만 이렇게
+            // 다른 시스템이서 활성화 시키는 방법 공부해고기, 없을수도 있음
         }
 
         [BurstCompile]
