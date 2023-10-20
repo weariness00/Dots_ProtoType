@@ -1,4 +1,5 @@
-﻿using Unity.Collections;
+﻿using System;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -8,68 +9,84 @@ namespace Dots_Animator_System.Scripts
 {
     public class AnimatorSyncMono : MonoBehaviour
     {
-        public Animator animator;
+        public NativeArray<AnimatorSyncLayerAuthoring> GetAnimatorInfo()
+        {
+            Animator animator = GetComponent<Animator>();
+            if (animator == null)
+            {
+                Debug.LogError($"Not Have Animator : {gameObject.name}");
+                return new NativeArray<AnimatorSyncLayerAuthoring>(0, Allocator.None);
+            }
+
+            AnimatorController controller = animator.runtimeAnimatorController as AnimatorController;
+            
+            int layerCount = animator.layerCount;
+            NativeArray<AnimatorSyncLayerAuthoring> animatorSyncLayerAuthorings = new NativeArray<AnimatorSyncLayerAuthoring>(layerCount, Allocator.Temp);
+            for (int i = 0; i < layerCount; i++)
+            {
+                AnimatorControllerLayer layer = controller.layers[i];
+                AnimatorSyncLayerAuthoring animatorSyncLayerAuthoring = new AnimatorSyncLayerAuthoring()
+                {
+                    Name = layer.name,
+                };
+
+                NativeArray<AnimationClipAuthoring> AnimationClipAuthorings = new NativeArray<AnimationClipAuthoring>(layer.stateMachine.states.Length, Allocator.Temp);
+
+                foreach (ChildAnimatorState childState in layer.stateMachine.states)
+                {
+                    AnimationClip clip = childState.state.motion as AnimationClip;
+                    if (clip == null) continue;
+
+                    AnimationClipAuthoring clipAuthoring = new AnimationClipAuthoring()
+                    {
+                        Name = clip.name,
+                        Length = clip.length,
+                        FrameRate = clip.frameRate,
+                        WrapMode = clip.wrapMode,
+                        Legacy = clip.legacy,
+                        Bounds = clip.localBounds,
+                    };
+
+                    var binds = AnimationUtility.GetCurveBindings(clip);
+                    NativeArray<AnimationCurveAuthoring> curveAuthorings = new NativeArray<AnimationCurveAuthoring>(binds.Length, Allocator.Temp);
+
+                    for (int j = 0; j < binds.Length; j++)
+                    {
+                        AnimationCurve curve = AnimationUtility.GetEditorCurve(clip, binds[j]);
+                        
+                        AnimationCurveAuthoring animationCurveAuthoring = new AnimationCurveAuthoring()
+                        {
+                            PropertyName = binds[j].propertyName,
+                            KeyFrames = new NativeArray<Keyframe>(curve.keys, Allocator.Persistent)
+                        };
+
+                        curveAuthorings[j] = animationCurveAuthoring;
+                    }
+
+                    clipAuthoring.CurveAuthorings = curveAuthorings;
+                    AnimationClipAuthorings[i] = clipAuthoring;
+                }
+
+                animatorSyncLayerAuthoring.AnimationClipAuthorings = AnimationClipAuthorings;
+                animatorSyncLayerAuthorings[i] = animatorSyncLayerAuthoring;
+            }
+            return animatorSyncLayerAuthorings;
+        }
     }
-    
+
     public class AnimatorSyncBaker : Baker<AnimatorSyncMono>
     {
         public override void Bake(AnimatorSyncMono authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
-        }
-
-        void SetAnimatorFrame(AnimatorSyncMono authoring)
-        {
-            AnimatorController controller = authoring.animator.runtimeAnimatorController as AnimatorController;
-
-            if (controller == null)
+            
+            // AddComponent(entity, new AnimatorSyncAuthoring(){ LayerAuthorings = authoring.GetAnimatorInfo()});
+            var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            
+            entityManager.AddSharedComponent(entity, new AnimatorSyncAuthoring()
             {
-                Debug.LogError("AnimatorController is not assigned.");
-                return;
-            }
-
-            int layerCount = authoring.animator.layerCount;
-            NativeArray<AnimatorSyncLayerAuthoring> animatorSyncLayerAuthorings = new NativeArray<AnimatorSyncLayerAuthoring>(layerCount, Allocator.TempJob);
-            for (int i = 0; i < layerCount; i++)
-            {
-                AnimatorControllerLayer layer = controller.layers[i];
-                Debug.LogFormat("Layer {0}: {1}", i, layer.name);
-                var animatorSyncLayerAuthoring = animatorSyncLayerAuthorings[i];
-                animatorSyncLayerAuthoring.Name = layer.name;
-                
-                foreach (ChildAnimatorState childState in layer.stateMachine.states)
-                {
-                    AnimationClip clip = childState.state.motion as AnimationClip;
-                    if (clip != null)
-                    {
-                        // string log = $"Clip Name : {clip.name}\n" +
-                        //              $"Clip Length : {clip.length}\n" +
-                        //              $"Clip FrameRate : {clip.frameRate}\n" +
-                        //              $"Wrap Mode: {clip.wrapMode}\n" +
-                        //              $"Legacy: {clip.legacy}\n" +
-                        //              $"Events Length: {clip.events.Length}\n" +
-                        //              $"Bounds: {clip.localBounds}\n";
-                        foreach (var binding in AnimationUtility.GetCurveBindings(clip))
-                        {
-                            AnimationCurve curve = AnimationUtility.GetEditorCurve(clip, binding);
-                            //
-                            // log += $"Property: {binding.propertyName} - Curve Keys: {curve.keys.Length}\n";
-                            //
-                            // foreach (var keyframe in curve.keys)
-                            // {
-                            //     log += $"\nkeyFrame Time : {keyframe.time}\n";
-                            //     log += $"keyFrame Value : {keyframe.value}\n";
-                            // }
-                            
-                        }
-                    }
-                }
-            }
-
-            void SetAnimatorLayer()
-            {
-                
-            }
+                LayerAuthorings = authoring.GetAnimatorInfo(),
+            });
         }
     }
 }
