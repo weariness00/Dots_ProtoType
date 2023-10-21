@@ -17,7 +17,7 @@ namespace Dots_Animator_System.Scripts
                 Debug.LogError($"Not Have Animator : {gameObject.name}");
                 return new NativeArray<AnimatorSyncLayerAuthoring>(0, Allocator.None);
             }
-
+        
             AnimatorController controller = animator.runtimeAnimatorController as AnimatorController;
             
             int layerCount = animator.layerCount;
@@ -29,14 +29,14 @@ namespace Dots_Animator_System.Scripts
                 {
                     Name = layer.name,
                 };
-
+        
                 NativeArray<AnimationClipAuthoring> AnimationClipAuthorings = new NativeArray<AnimationClipAuthoring>(layer.stateMachine.states.Length, Allocator.Temp);
-
+        
                 foreach (ChildAnimatorState childState in layer.stateMachine.states)
                 {
                     AnimationClip clip = childState.state.motion as AnimationClip;
                     if (clip == null) continue;
-
+        
                     AnimationClipAuthoring clipAuthoring = new AnimationClipAuthoring()
                     {
                         Name = clip.name,
@@ -46,10 +46,10 @@ namespace Dots_Animator_System.Scripts
                         Legacy = clip.legacy,
                         Bounds = clip.localBounds,
                     };
-
+        
                     var binds = AnimationUtility.GetCurveBindings(clip);
                     NativeArray<AnimationCurveAuthoring> curveAuthorings = new NativeArray<AnimationCurveAuthoring>(binds.Length, Allocator.Temp);
-
+        
                     for (int j = 0; j < binds.Length; j++)
                     {
                         AnimationCurve curve = AnimationUtility.GetEditorCurve(clip, binds[j]);
@@ -57,16 +57,16 @@ namespace Dots_Animator_System.Scripts
                         AnimationCurveAuthoring animationCurveAuthoring = new AnimationCurveAuthoring()
                         {
                             PropertyName = binds[j].propertyName,
-                            KeyFrames = new NativeArray<Keyframe>(curve.keys, Allocator.Persistent)
+                            KeyFrames = new NativeArray<Keyframe>(curve.keys, Allocator.Temp)
                         };
-
+        
                         curveAuthorings[j] = animationCurveAuthoring;
                     }
-
+        
                     clipAuthoring.CurveAuthorings = curveAuthorings;
                     AnimationClipAuthorings[i] = clipAuthoring;
                 }
-
+        
                 animatorSyncLayerAuthoring.AnimationClipAuthorings = AnimationClipAuthorings;
                 animatorSyncLayerAuthorings[i] = animatorSyncLayerAuthoring;
             }
@@ -79,11 +79,8 @@ namespace Dots_Animator_System.Scripts
         public override void Bake(AnimatorSyncMono authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
-            
-            // AddComponent(entity, new AnimatorSyncAuthoring(){ LayerAuthorings = authoring.GetAnimatorInfo()});
-            var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            
-            entityManager.AddSharedComponent(entity, new AnimatorSyncAuthoring()
+
+            AddSharedComponent(entity,new AnimatorSyncAuthoring()
             {
                 LayerAuthorings = authoring.GetAnimatorInfo(),
             });

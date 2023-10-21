@@ -13,34 +13,6 @@ namespace Dots_Animator_System.Scripts
         private void Start()
         {
             TestAnimator();
-            // var controller = animator.runtimeAnimatorController as UnityEditor.Animations.AnimatorController;
-            //
-            // // controller.layers[0].stateMachine;
-            // foreach (var layer in controller.layers) 
-            // {
-            //     // Debug.Log(layer.stateMachine.defaultState.name);    // 일반 이름
-            //     // Debug.Log(layer.stateMachine.defaultState);         // AnimatorState  
-            //     // Debug.Log(layer.stateMachine.defaultState.motion);  // AnimationClip
-            //     //
-            //     // var clip = layer.stateMachine.defaultState.motion as AnimationClip;  
-            //     // Debug.Log(clip.name + " clip");
-            //
-            //     
-            //     foreach (var stateMachine in layer.stateMachine.stateMachines)
-            //     {
-            //         Debug.Log(stateMachine.stateMachine.defaultState.name);
-            //     }
-            //     
-            //     // foreach (var animatorState in layer.stateMachine.name)
-            //     // {
-            //     //     Debug.Log(animatorState);
-            //     // }
-            // }
-            //
-            // // foreach (var clips in animator.runtimeAnimatorController.animationClips)
-            // // {
-            // //     Debug.Log(clips.name);
-            // // }
         }
 
         void ClipLog(AnimationClip clip = null)
