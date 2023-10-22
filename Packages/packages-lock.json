@@ -1,5 +1,13 @@
 {
   "dependencies": {
+    "com.rk.rukhanka": {
+      "version": "file:com.rk.rukhanka",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.entities.graphics": "1.0.16"
+      }
+    },
     "com.unity.burst": {
       "version": "1.8.8",
       "depth": 1,
