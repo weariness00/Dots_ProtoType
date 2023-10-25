@@ -18,7 +18,7 @@ namespace StateMachine.Monster.System
             var spawnerBuffer = SystemAPI.GetSingletonBuffer<SpawnPlacePoint>();
             var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
-            var newEntity = entityManager.Instantiate();
+            // var newEntity = entityManager.Instantiate();
         }
 
         [BurstCompile]
