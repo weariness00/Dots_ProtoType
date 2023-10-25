@@ -1,5 +1,6 @@
 ﻿using System;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -9,28 +10,28 @@ namespace Dots_Animator_System.Scripts
 {
     public class AnimatorSyncMono : MonoBehaviour
     {
-        public NativeArray<AnimatorSyncLayerAuthoring> GetAnimatorInfo()
+        public AnimatorSyncAuthoring GetAnimatorInfo()
         {
+            AnimatorSyncAuthoring animatorSync = new AnimatorSyncAuthoring();
             Animator animator = GetComponent<Animator>();
             if (animator == null)
             {
                 Debug.LogError($"Not Have Animator : {gameObject.name}");
-                return new NativeArray<AnimatorSyncLayerAuthoring>(0, Allocator.None);
+                animatorSync.LayerAuthorings = new UnsafeList<AnimatorSyncLayerAuthoring>(0, Allocator.Temp);
+                return animatorSync;
             }
         
             AnimatorController controller = animator.runtimeAnimatorController as AnimatorController;
             
-            int layerCount = animator.layerCount;
-            NativeArray<AnimatorSyncLayerAuthoring> animatorSyncLayerAuthorings = new NativeArray<AnimatorSyncLayerAuthoring>(layerCount, Allocator.Temp);
-            for (int i = 0; i < layerCount; i++)
+            UnsafeList<AnimatorSyncLayerAuthoring> animatorSyncLayerAuthorings = new UnsafeList<AnimatorSyncLayerAuthoring>(controller.layers.Length, Allocator.Temp);
+            foreach (var layer in controller.layers)
             {
-                AnimatorControllerLayer layer = controller.layers[i];
                 AnimatorSyncLayerAuthoring animatorSyncLayerAuthoring = new AnimatorSyncLayerAuthoring()
                 {
                     Name = layer.name,
                 };
         
-                NativeArray<AnimationClipAuthoring> AnimationClipAuthorings = new NativeArray<AnimationClipAuthoring>(layer.stateMachine.states.Length, Allocator.Temp);
+                UnsafeList<AnimationClipAuthoring> AnimationClipAuthorings = new UnsafeList<AnimationClipAuthoring>(layer.stateMachine.states.Length, Allocator.Temp);
         
                 foreach (ChildAnimatorState childState in layer.stateMachine.states)
                 {
@@ -48,29 +49,33 @@ namespace Dots_Animator_System.Scripts
                     };
         
                     var binds = AnimationUtility.GetCurveBindings(clip);
-                    NativeArray<AnimationCurveAuthoring> curveAuthorings = new NativeArray<AnimationCurveAuthoring>(binds.Length, Allocator.Temp);
+                    UnsafeList<AnimationCurveAuthoring> curveAuthorings = new UnsafeList<AnimationCurveAuthoring>(binds.Length, Allocator.Temp);
         
-                    for (int j = 0; j < binds.Length; j++)
+                    foreach (var bind in binds)
                     {
-                        AnimationCurve curve = AnimationUtility.GetEditorCurve(clip, binds[j]);
+                        AnimationCurve curve = AnimationUtility.GetEditorCurve(clip, bind);
                         
                         AnimationCurveAuthoring animationCurveAuthoring = new AnimationCurveAuthoring()
                         {
-                            PropertyName = binds[j].propertyName,
-                            KeyFrames = new NativeArray<Keyframe>(curve.keys, Allocator.Temp)
+                            PropertyName = bind.propertyName,
+                            KeyFrames = new UnsafeList<Keyframe>(curve.keys.Length, Allocator.Temp)
                         };
+
+                        foreach (var key in curve.keys) animationCurveAuthoring.KeyFrames.Add(key);
         
-                        curveAuthorings[j] = animationCurveAuthoring;
+                        curveAuthorings.Add(animationCurveAuthoring);
                     }
         
                     clipAuthoring.CurveAuthorings = curveAuthorings;
-                    AnimationClipAuthorings[i] = clipAuthoring;
+                    AnimationClipAuthorings.Add(clipAuthoring);
                 }
         
                 animatorSyncLayerAuthoring.AnimationClipAuthorings = AnimationClipAuthorings;
-                animatorSyncLayerAuthorings[i] = animatorSyncLayerAuthoring;
+                animatorSyncLayerAuthorings.Add(animatorSyncLayerAuthoring);
             }
-            return animatorSyncLayerAuthorings;
+
+            animatorSync.LayerAuthorings = animatorSyncLayerAuthorings;
+            return animatorSync;
         }
     }
 
@@ -79,11 +84,13 @@ namespace Dots_Animator_System.Scripts
         public override void Bake(AnimatorSyncMono authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
+            
+            AddComponent(entity, new AnimatorSync(){ AnimatorSyncAuthoring = authoring.GetAnimatorInfo()});
 
-            AddSharedComponent(entity,new AnimatorSyncAuthoring()
-            {
-                LayerAuthorings = authoring.GetAnimatorInfo(),
-            });
+            // AddSharedComponent(entity,new AnimatorSyncAuthoring()
+            // {
+            //     LayerAuthorings = authoring.GetAnimatorInfo(),   
+            // });
         }
     }
 }

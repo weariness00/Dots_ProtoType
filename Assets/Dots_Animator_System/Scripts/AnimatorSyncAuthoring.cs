@@ -1,24 +1,42 @@
 ﻿using System;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using UnityEditor;
 using UnityEngine;
 
 namespace Dots_Animator_System.Scripts
 {
-    public struct AnimatorSyncAuthoring : ISharedComponentData
+    public struct AnimatorSync : IComponentData
     {
-        public NativeArray<AnimatorSyncLayerAuthoring> LayerAuthorings;
+        public AnimatorSyncAuthoring AnimatorSyncAuthoring;
     }
     
-    public struct AnimatorSyncLayerAuthoring
+    public struct AnimatorSyncAuthoring : IDisposable
+    {
+        public UnsafeList<AnimatorSyncLayerAuthoring> LayerAuthorings;
+
+        public void Dispose()
+        {
+            foreach (var layer in LayerAuthorings) layer.Dispose();
+            LayerAuthorings.Dispose();
+        }
+    }
+    
+    public struct AnimatorSyncLayerAuthoring : IDisposable
     {
         public FixedString64Bytes Name;
         
-        public NativeArray<AnimationClipAuthoring> AnimationClipAuthorings;
+        public UnsafeList<AnimationClipAuthoring> AnimationClipAuthorings;
+
+        public void Dispose()
+        {
+            foreach (var clip in AnimationClipAuthorings) clip.Dispose();
+            AnimationClipAuthorings.Dispose();
+        }
     }
     
-    public struct AnimationClipAuthoring
+    public struct AnimationClipAuthoring : IDisposable
     {
         public FixedString64Bytes Name;
         public float Length;
@@ -27,13 +45,24 @@ namespace Dots_Animator_System.Scripts
         public bool Legacy;
         public Bounds Bounds;
     
-        public NativeArray<AnimationCurveAuthoring> CurveAuthorings;
+        public UnsafeList<AnimationCurveAuthoring> CurveAuthorings;
+
+        public void Dispose()
+        {
+            foreach (var curve in CurveAuthorings) curve.Dispose();
+            CurveAuthorings.Dispose();
+        }
     }
     
-    public struct AnimationCurveAuthoring
+    public struct AnimationCurveAuthoring : IDisposable
     {
         public FixedString64Bytes PropertyName;
     
-        public NativeArray<Keyframe> KeyFrames;
+        public UnsafeList<Keyframe> KeyFrames;
+
+        public void Dispose()
+        {
+            KeyFrames.Dispose();
+        }
     }
 }
