@@ -7,15 +7,24 @@ using UnityEngine;
 
 namespace Dots_Animator_System.Scripts
 {
+    // Bone 가져오기
+    // Blob 에셋 사용해야됨
+
+    public class AnimatorManaged : IComponentData
+    {
+        public Animator Animator;
+    }
+    
     public struct AnimatorSync : IComponentData
     {
+        public FixedString64Bytes Name;
         public AnimatorSyncAuthoring AnimatorSyncAuthoring;
     }
     
     public struct AnimatorSyncAuthoring : IDisposable
     {
         public UnsafeList<AnimatorSyncLayerAuthoring> LayerAuthorings;
-
+    
         public void Dispose()
         {
             foreach (var layer in LayerAuthorings) layer.Dispose();
@@ -28,7 +37,7 @@ namespace Dots_Animator_System.Scripts
         public FixedString64Bytes Name;
         
         public UnsafeList<AnimationClipAuthoring> AnimationClipAuthorings;
-
+    
         public void Dispose()
         {
             foreach (var clip in AnimationClipAuthorings) clip.Dispose();
@@ -46,7 +55,7 @@ namespace Dots_Animator_System.Scripts
         public Bounds Bounds;
     
         public UnsafeList<AnimationCurveAuthoring> CurveAuthorings;
-
+    
         public void Dispose()
         {
             foreach (var curve in CurveAuthorings) curve.Dispose();
@@ -59,7 +68,7 @@ namespace Dots_Animator_System.Scripts
         public FixedString64Bytes PropertyName;
     
         public UnsafeList<Keyframe> KeyFrames;
-
+    
         public void Dispose()
         {
             KeyFrames.Dispose();
