@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Runtime.InteropServices;
+using Rukhanka;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
@@ -14,6 +16,20 @@ namespace Dots_Animator_System.Scripts
     {
         public Animator Animator;
     }
+
+    // public struct Paramater
+    // {
+    //     [FieldOffset(0)]
+    //     public float FloatValue;
+    //     [FieldOffset(0)]
+    //     public int IntValue;
+    //     [FieldOffset(0)]
+    //     public bool BoolValue;
+    //
+    //     public static implicit operator Paramater(float f) => new Paramater() { floatValue = f };
+    //     public static implicit operator Paramater(int i) => new Paramater() { intValue = i };
+    //     public static implicit operator Paramater(bool b) => new Paramater() { boolValue = b };
+    // }
     
     public struct AnimatorSync : IComponentData
     {
@@ -23,7 +39,7 @@ namespace Dots_Animator_System.Scripts
     
     public struct AnimatorSyncAuthoring : IDisposable
     {
-        public UnsafeList<AnimatorSyncLayerAuthoring> LayerAuthorings;
+        public UnsafeList<AnimatorLayer> LayerAuthorings;
     
         public void Dispose()
         {
@@ -32,18 +48,6 @@ namespace Dots_Animator_System.Scripts
         }
     }
     
-    public struct AnimatorSyncLayerAuthoring : IDisposable
-    {
-        public FixedString64Bytes Name;
-        
-        public UnsafeList<AnimationClipAuthoring> AnimationClipAuthorings;
-    
-        public void Dispose()
-        {
-            foreach (var clip in AnimationClipAuthorings) clip.Dispose();
-            AnimationClipAuthorings.Dispose();
-        }
-    }
     
     public struct AnimationClipAuthoring : IDisposable
     {
