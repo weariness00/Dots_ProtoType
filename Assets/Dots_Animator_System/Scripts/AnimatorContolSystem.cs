@@ -21,12 +21,15 @@ namespace Dots_Animator_System.Scripts
         public void OnUpdate(ref SystemState state)
         {
             var ecb = SystemAPI.GetSingleton<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
-            var controlJob = new AnimatorStateJob()
-            {
-
-            };
-
-            state.Dependency = controlJob.ScheduleParallel(state.Dependency);
+            var animatorControllerBlobAssetReferenceBufferLookup = SystemAPI.GetBufferLookup<AnimatorControllerBlobAssetReference>();
+            
+            // var controlJob = new AnimatorStateJob()
+            // {
+            //
+            // };
+            //
+            // state.Dependency = controlJob.ScheduleParallel(state.Dependency);
         }
     }
 }
+    

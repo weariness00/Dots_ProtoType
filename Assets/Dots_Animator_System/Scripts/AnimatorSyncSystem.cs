@@ -29,9 +29,9 @@ namespace Dots_Animator_System.Scripts
         public void OnUpdate(ref SystemState state)
         {
             ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
-            foreach (var (animatorManaged, entity) in SystemAPI.Query<AnimatorManaged>().WithNone<AnimatorSync>().WithEntityAccess())
+            foreach (var (animatorManaged, entity) in SystemAPI.Query<AnimatorManaged>().WithNone<AnimatorController>().WithEntityAccess())
             {
-                var animatorSync = GetAnimatorSync(animatorManaged.Animator.runtimeAnimatorController as AnimatorController);
+                var animatorSync = GetAnimatorSync(animatorManaged.Animator.runtimeAnimatorController as UnityEditor.Animations.AnimatorController);
                 ecb.AddComponent(entity, animatorSync);
                 GetBoneEntity(entity);
                 
@@ -66,9 +66,9 @@ namespace Dots_Animator_System.Scripts
             }
         }
 
-        AnimatorSync GetAnimatorSync(AnimatorController controller)
+        AnimatorController GetAnimatorSync(UnityEditor.Animations.AnimatorController controller)
         {
-            AnimatorSync animatorSync = new AnimatorSync()
+            AnimatorController animatorController = new AnimatorController()
             {
                 Name =  controller.name,
                 LayerAuthorings = new UnsafeList<AnimatorLayer>(controller.layers.Length, Allocator.Persistent),
@@ -76,10 +76,10 @@ namespace Dots_Animator_System.Scripts
 
             foreach (var layer in controller.layers)
             {
-                animatorSync.LayerAuthorings.Add(GetAnimatorLayer(layer));
+                animatorController.LayerAuthorings.Add(GetAnimatorLayer(layer));
             }
 
-            return animatorSync;
+            return animatorController;
         }
 
         AnimatorLayer GetAnimatorLayer(AnimatorControllerLayer layer)

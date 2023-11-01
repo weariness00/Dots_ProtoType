@@ -23,18 +23,27 @@ namespace Dots_Animator_System.Scripts
         {
             var ecb = SystemAPI.GetSingleton<EndInitializationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
             BlobBuilder blobBuilder = new BlobBuilder(Allocator.Persistent);
-            foreach (var (animatorSync, entity) in SystemAPI.Query<AnimatorSync>().WithEntityAccess().WithNone<AnimatorSyncBlobAssetReference>())
+            foreach (var (animatorSync, entity) in SystemAPI.Query<AnimatorController>().WithEntityAccess().WithNone<AnimatorControllerBlobAssetReference>())
             {
-                ref var animatorSyncBlob = ref blobBuilder.ConstructRoot<AnimatorSyncBlob>();
-                animatorSyncBlob.MakeBlob(animatorSync, blobBuilder);
-                
-                var animatorSyncBlobAssetReference = new AnimatorSyncBlobAssetReference()
+                ref var animatorSyncBlob = ref blobBuilder.ConstructRoot<AnimatorControllerBlob>();
+                animatorSyncBlob.MakeBlob(SystemAPI.GetBuffer<BoneInfo>(entity), animatorSync, blobBuilder);
+
+                var blobAssetReferenceBuffer = ecb.AddBuffer<AnimatorControllerBlobAssetReference>(entity);
+                var blobReference = blobBuilder.CreateBlobAssetReference<AnimatorControllerBlob>(Allocator.Persistent);
+                for (int i = 0; i < blobReference.Value.Layers.Length; i++)
                 {
-                    Animator = blobBuilder.CreateBlobAssetReference<AnimatorSyncBlob>(Allocator.Persistent),
-                };
+                    blobAssetReferenceBuffer.Add(new AnimatorControllerBlobAssetReference()
+                    {
+                        Animator = blobReference,
+                        LayerIndex = i,
+                        LayerName = blobReference.Value.Layers[i].Name,
+                        
+                        CurrenStateBlob = blobReference.Value.Layers[i].GetStateBlob(blobReference.Value.Layers[i].CurrentStateHashCode),
+                    });
+                }
                 
-                ecb.AddComponent(entity, animatorSyncBlobAssetReference);
-                ecb.RemoveComponent<AnimatorSync>(entity);
+                ecb.AddComponent<AnimatorTag>(entity);
+                ecb.RemoveComponent<AnimatorController>(entity);
             }
         }
     }

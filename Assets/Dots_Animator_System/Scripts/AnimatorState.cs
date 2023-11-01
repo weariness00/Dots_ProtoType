@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
 
 namespace Dots_Animator_System.Scripts
 {
-    public struct AnimatorStateBlob
+    public struct AnimatorStateBlob : IEquatable<int>
     {
         public FixedString128Bytes Name;
         public float Speed;
@@ -14,8 +16,10 @@ namespace Dots_Animator_System.Scripts
         public FixedString128Bytes CycleOffsetParameter;
 
         public BlobArray<AnimatorTransitionBlob> Transitions;
-        //public int HashCode;
+        public int NameHashCode;
 
+        public bool Equals(int hash) => hash == NameHashCode;
+        
         public void MakeBlob(AnimatorState state, BlobBuilder blobBuilder)
         {
             Name = state.Name;
@@ -24,6 +28,7 @@ namespace Dots_Animator_System.Scripts
             TimeParameter = state.TimeParameter;
             CycleOffset = state.CycleOffset;
             CycleOffsetParameter = state.CycleOffsetParameter;
+            NameHashCode = state.NameHashCode;
 
             var transitionLenght = state.Transitions.Length;
             if (transitionLenght > 0)

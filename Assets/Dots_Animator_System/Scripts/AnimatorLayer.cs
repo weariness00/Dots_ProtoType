@@ -31,6 +31,19 @@ namespace Dots_Animator_System.Scripts
                 for (int i = 0; i < layer.AnimatorStates.Length; i++) blobStateArray[i].MakeBlob(layer.AnimatorStates[i], blobBuilder);
             }
         }
+
+        public AnimatorStateBlob GetStateBlob(int hashCode)
+        {
+            for (int i = 0; i < AnimatorStates.Length; i++)
+            {
+                if (AnimatorStates[i].Equals(hashCode))
+                {
+                    return AnimatorStates[i];
+                }
+            }
+
+            return GetStateBlob(DefaultStateHashCode);
+        }
     }
 
     public struct AnimatorLayer : IDisposable
