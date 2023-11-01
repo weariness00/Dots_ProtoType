@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace Dots_Animator_System.Scripts
 {
+    [UpdateInGroup(typeof(PresentationSystemGroup))]
     public partial struct AnimatorSyncSystem : ISystem
     {
         private EntityCommandBuffer ecb;
