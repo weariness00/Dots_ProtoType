@@ -17,9 +17,8 @@ namespace Dots_Animator_System.Scripts
 
         public BlobArray<Keyframe> KeyFrames;
 
-        public AnimationCurveBlob(AnimationCurve curve, BlobBuilder blobBuilder)
+        public void MakeBlob(AnimationCurve curve, BlobBuilder blobBuilder)
         {
-            this = blobBuilder.ConstructRoot<AnimationCurveBlob>();
             PropertyName = curve.PropertyName;
 
             var keyFramesLength = curve.KeyFrames.Length;

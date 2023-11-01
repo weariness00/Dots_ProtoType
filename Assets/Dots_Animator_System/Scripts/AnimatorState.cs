@@ -16,10 +16,8 @@ namespace Dots_Animator_System.Scripts
         public BlobArray<AnimatorTransitionBlob> Transitions;
         //public int HashCode;
 
-        public AnimatorStateBlob(AnimatorState state, BlobBuilder blobBuilder)
+        public void MakeBlob(AnimatorState state, BlobBuilder blobBuilder)
         {
-            this = blobBuilder.ConstructRoot<AnimatorStateBlob>();
-
             Name = state.Name;
             Speed = state.Speed;
             SpeedMultiplierParameter = state.SpeedMultiplierParameter;
@@ -31,7 +29,7 @@ namespace Dots_Animator_System.Scripts
             if (transitionLenght > 0)
             {
                 var blobTransitionArray = blobBuilder.Allocate(ref this.Transitions, transitionLenght);
-                for (int i = 0; i < transitionLenght; i++) blobTransitionArray[i] = new AnimatorTransitionBlob(state.Transitions[i], blobBuilder);
+                for (int i = 0; i < transitionLenght; i++) blobTransitionArray[i].MakeBlob(state.Transitions[i], blobBuilder);
             }
         }
     }

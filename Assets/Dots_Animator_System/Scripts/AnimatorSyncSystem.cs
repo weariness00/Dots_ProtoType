@@ -33,6 +33,8 @@ namespace Dots_Animator_System.Scripts
                 var animatorSync = GetAnimatorSync(animatorManaged.Animator.runtimeAnimatorController as AnimatorController);
                 ecb.AddComponent(entity, animatorSync);
                 GetBoneEntity(entity);
+                
+                ecb.RemoveComponent<AnimatorManaged>(entity);
             }
         }
 

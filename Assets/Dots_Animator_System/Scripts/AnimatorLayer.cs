@@ -14,22 +14,21 @@ namespace Dots_Animator_System.Scripts
         public int CurrentStateHashCode;
         public int DefaultStateHashCode;
 
-        public AnimatorLayerBlob(AnimatorLayer layer, BlobBuilder blobBuilder)
+        public void MakeBlob(AnimatorLayer layer, BlobBuilder blobBuilder)
         {
-            this = blobBuilder.ConstructRoot<AnimatorLayerBlob>();
             Name = layer.Name;
             CurrentStateHashCode = layer.CurrentStateHashCode;
             DefaultStateHashCode = layer.DefaultStateHashCode;
-
+            
             if (layer.AnimationClip.Length > 0)
             {
                 var blobClipArray = blobBuilder.Allocate(ref this.AnimationClips, layer.AnimationClip.Length);
-                for (int i = 0; i < layer.AnimationClip.Length; i++) blobClipArray[i] = new AnimationClipBlob(layer.AnimationClip[i], blobBuilder);
+                for (int i = 0; i < layer.AnimationClip.Length; i++) blobClipArray[i].MakeBlob(layer.AnimationClip[i], blobBuilder);
             }
             if (layer.AnimatorStates.Length > 0)
             {
                 var blobStateArray = blobBuilder.Allocate(ref this.AnimatorStates, layer.AnimatorStates.Length);
-                for (int i = 0; i < layer.AnimatorStates.Length; i++) blobStateArray[i] = new AnimatorStateBlob(layer.AnimatorStates[i], blobBuilder);
+                for (int i = 0; i < layer.AnimatorStates.Length; i++) blobStateArray[i].MakeBlob(layer.AnimatorStates[i], blobBuilder);
             }
         }
     }

@@ -25,14 +25,16 @@ namespace Dots_Animator_System.Scripts
             BlobBuilder blobBuilder = new BlobBuilder(Allocator.Persistent);
             foreach (var (animatorSync, entity) in SystemAPI.Query<AnimatorSync>().WithEntityAccess().WithNone<AnimatorSyncBlobAssetReference>())
             {
-                // var animatorSyncBlob = new AnimatorSyncBlob(animatorSync, blobBuilder);
-                //
-                // var animatorSyncBlobAssetReference = new AnimatorSyncBlobAssetReference()
-                // {
-                //     Animator = blobBuilder.CreateBlobAssetReference<AnimatorSyncBlob>(Allocator.Persistent),
-                // };
-                //
-                // ecb.AddComponent(entity, animatorSyncBlobAssetReference);
+                ref var animatorSyncBlob = ref blobBuilder.ConstructRoot<AnimatorSyncBlob>();
+                animatorSyncBlob.MakeBlob(animatorSync, blobBuilder);
+                
+                var animatorSyncBlobAssetReference = new AnimatorSyncBlobAssetReference()
+                {
+                    Animator = blobBuilder.CreateBlobAssetReference<AnimatorSyncBlob>(Allocator.Persistent),
+                };
+                
+                ecb.AddComponent(entity, animatorSyncBlobAssetReference);
+                ecb.RemoveComponent<AnimatorSync>(entity);
             }
         }
     }

@@ -27,16 +27,15 @@ namespace Dots_Animator_System.Scripts
         public FixedString64Bytes Name;
         public BlobArray<AnimatorLayerBlob> Layers;
 
-        public AnimatorSyncBlob(AnimatorSync animatorSync, BlobBuilder blobBuilder)
+        public void MakeBlob(AnimatorSync animatorSync, BlobBuilder blobBuilder)
         {
-            this = blobBuilder.ConstructRoot<AnimatorSyncBlob>();
             Name = animatorSync.Name;
 
             var layerLength = animatorSync.LayerAuthorings.Length;
             if (layerLength > 0)
             {
-                var blobLayers = blobBuilder.Allocate(ref this.Layers,layerLength);
-                for (int i = 0; i < layerLength; i++) blobLayers[i] = new AnimatorLayerBlob(animatorSync.LayerAuthorings[i], blobBuilder);
+                var blobLayers = blobBuilder.Allocate(ref this.Layers, layerLength);
+                for (int i = 0; i < layerLength; i++) blobLayers[i].MakeBlob(animatorSync.LayerAuthorings[i], blobBuilder);
             }
         }
     }

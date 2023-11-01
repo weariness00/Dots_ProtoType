@@ -22,10 +22,8 @@ namespace Dots_Animator_System.Scripts
 
         public BlobArray<AnimatorCondition> Conditions;
 
-        public AnimatorTransitionBlob(AnimatorTransition transition, BlobBuilder blobBuilder)
+        public void MakeBlob(AnimatorTransition transition, BlobBuilder blobBuilder)
         {
-            this = blobBuilder.ConstructRoot<AnimatorTransitionBlob>();
-
             Name = transition.Name;
             Duration = transition.Duration;
             ExitTime = transition.ExitTime;

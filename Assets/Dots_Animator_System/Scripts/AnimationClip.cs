@@ -23,10 +23,8 @@ namespace Dots_Animator_System.Scripts
 
         public BlobArray<AnimationCurveBlob> Curves;
 
-        public AnimationClipBlob(AnimationClip clip, BlobBuilder blobBuilder)
+        public void MakeBlob(AnimationClip clip, BlobBuilder blobBuilder)
         {
-            this = blobBuilder.ConstructRoot<AnimationClipBlob>();
-
             Name = clip.Name;
             Length = clip.Length;
             FrameRate = clip.FrameRate;
@@ -38,7 +36,7 @@ namespace Dots_Animator_System.Scripts
             if (curveLength > 0)
             {
                 var blobCurveArray = blobBuilder.Allocate(ref this.Curves, curveLength);
-                for (int i = 0; i < curveLength; i++) blobCurveArray[i] = new AnimationCurveBlob(clip.CurveAuthorings[i], blobBuilder);
+                for (int i = 0; i < curveLength; i++) blobCurveArray[i].MakeBlob(clip.CurveAuthorings[i], blobBuilder);
             }
         }
     }
