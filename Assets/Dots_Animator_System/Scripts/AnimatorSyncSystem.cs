@@ -1,7 +1,9 @@
-﻿using Unity.Burst;
+﻿using System.Collections.Generic;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
+using Unity.Transforms;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -10,6 +12,7 @@ namespace Dots_Animator_System.Scripts
 {
     public partial struct AnimatorSyncSystem : ISystem
     {
+        private EntityCommandBuffer ecb;
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
@@ -24,11 +27,39 @@ namespace Dots_Animator_System.Scripts
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
+            ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
             foreach (var (animatorManaged, entity) in SystemAPI.Query<AnimatorManaged>().WithNone<AnimatorSync>().WithEntityAccess())
             {
                 var animatorSync = GetAnimatorSync(animatorManaged.Animator.runtimeAnimatorController as AnimatorController);
                 ecb.AddComponent(entity, animatorSync);
+                GetBoneEntity(entity);
+            }
+        }
+
+        void GetBoneEntity(Entity entity)
+        {
+            var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
+            var boneInfoBuffer = ecb.AddBuffer<BoneInfo>(entity);
+            boneInfoBuffer.Add(new BoneInfo(){Entity = entity, Name = entityManager.GetName(entity)});
+            GetChild(entityManager, entity, ref boneInfoBuffer);
+        }
+
+        void GetChild(EntityManager entityManager, Entity entity, ref DynamicBuffer<BoneInfo> boneInfoBuffer)
+        {
+            if (entityManager.HasBuffer<Child>(entity))
+            {
+                var entityBuffer = entityManager.GetBuffer<Child>(entity);
+                foreach (var child in entityBuffer)
+                {
+                    boneInfoBuffer.Add(new BoneInfo()
+                    {
+                        Entity = child.Value,
+                        Name = entityManager.GetName(child.Value)
+                    });
+
+                    GetChild(entityManager, child.Value, ref boneInfoBuffer);
+                }
             }
         }
 
