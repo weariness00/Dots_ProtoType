@@ -72,13 +72,12 @@ namespace Dots_Animator_System.Scripts
             {
                 Name =  controller.name,
                 LayerAuthorings = new UnsafeList<AnimatorLayer>(controller.layers.Length, Allocator.Persistent),
+                AnimationClips = new UnsafeList<AnimationClip>(controller.animationClips.Length, Allocator.Persistent),
             };
 
-            foreach (var layer in controller.layers)
-            {
-                animatorController.LayerAuthorings.Add(GetAnimatorLayer(layer));
-            }
-
+            foreach (var layer in controller.layers) animatorController.LayerAuthorings.Add(GetAnimatorLayer(layer));
+            foreach (var clip in controller.animationClips) animatorController.AnimationClips.Add(new AnimationClip(clip));
+            
             return animatorController;
         }
 
@@ -87,8 +86,11 @@ namespace Dots_Animator_System.Scripts
             AnimatorLayer animatorSyncLayerAuthoring = new AnimatorLayer()
             {
                 Name = layer.name,
-                AnimationClip = new UnsafeList<AnimationClip>(layer.stateMachine.states.Length, Allocator.Persistent),
+                Weight = layer.defaultWeight,
+                
+                // AnimationClip = new UnsafeList<AnimationClip>(layer.stateMachine.states.Length, Allocator.Persistent),
                 AnimatorStates = new NativeArray<AnimatorState>(layer.stateMachine.states.Length, Allocator.Persistent),
+                
                 CurrentStateHashCode = layer.stateMachine.defaultState.nameHash,
                 DefaultStateHashCode = layer.stateMachine.defaultState.nameHash,
             };
@@ -97,7 +99,7 @@ namespace Dots_Animator_System.Scripts
             foreach (ChildAnimatorState childState in layer.stateMachine.states)
             {
                 var clip = GetAnimationClip(childState);
-                animatorSyncLayerAuthoring.AnimationClip.Add(clip);
+                // animatorSyncLayerAuthoring.AnimationClip.Add(clip);
                 animatorSyncLayerAuthoring.AnimatorStates[i] = GetAnimatorState(childState.state, clip);
                 i++;
             }
@@ -110,7 +112,7 @@ namespace Dots_Animator_System.Scripts
             AnimatorState animatorState = new AnimatorState()
             {
                 Name = state.name,
-                AniamtionClipHashCode = clip.GetHashCode(),
+                AnimationClipHashCode = clip.GetHashCode(),
                 Transitions = GetAnimatorStateTransition(state),
                 Speed = state.speed,
                 SpeedMultiplierParameter = state.speedParameter,

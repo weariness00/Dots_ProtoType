@@ -15,6 +15,7 @@ namespace Dots_Animator_System.Scripts
         public float CycleOffset;
         public FixedString128Bytes CycleOffsetParameter;
 
+        public int AnimationClipHashCode;
         public BlobArray<AnimatorTransitionBlob> Transitions;
         public int NameHashCode;
 
@@ -28,8 +29,9 @@ namespace Dots_Animator_System.Scripts
             TimeParameter = state.TimeParameter;
             CycleOffset = state.CycleOffset;
             CycleOffsetParameter = state.CycleOffsetParameter;
-            NameHashCode = state.NameHashCode;
 
+            AnimationClipHashCode = state.AnimationClipHashCode;
+            NameHashCode = state.NameHashCode;
             var transitionLenght = state.Transitions.Length;
             if (transitionLenght > 0)
             {
@@ -42,7 +44,7 @@ namespace Dots_Animator_System.Scripts
     public struct AnimatorState : IEquatable<int>, IDisposable
     {
         public FixedString128Bytes Name;
-        public int AniamtionClipHashCode;
+        public int AnimationClipHashCode;
         public NativeArray<AnimatorTransition> Transitions;
         public float Speed;
         public FixedString128Bytes SpeedMultiplierParameter;

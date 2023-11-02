@@ -21,6 +21,7 @@ namespace Dots_Animator_System.Scripts
         public BlobAssetReference<AnimatorControllerBlob> Animator;
         public int LayerIndex;
         public FixedString128Bytes LayerName;
+        public float LayerWeight;
 
         public AnimatorStateBlob CurrenStateBlob;
     }
@@ -29,8 +30,9 @@ namespace Dots_Animator_System.Scripts
     {
         public FixedString64Bytes Name;
         public BlobArray<AnimatorLayerBlob> Layers;
+        public BlobArray<AnimationClipBlob> AnimationClipArray;
         public BlobArray<BoneInfoBlob> BoneInfoArray;
-
+        
         public void MakeBlob(DynamicBuffer<BoneInfo> boneInfoArray, AnimatorController animatorController, BlobBuilder blobBuilder)
         {
             Name = animatorController.Name;
@@ -47,6 +49,25 @@ namespace Dots_Animator_System.Scripts
                 var blobBoneInfoArray = blobBuilder.Allocate(ref this.BoneInfoArray, boneInfoArray.Length);
                 for (int i = 0; i < boneInfoArray.Length; i++) blobBoneInfoArray[i].MakeBlob(boneInfoArray[i]);
             }
+
+            if (animatorController.AnimationClips.Length > 0)
+            {
+                var blobAnimationClipArray = blobBuilder.Allocate(ref this.AnimationClipArray, animatorController.AnimationClips.Length);
+                for (int i = 0; i < animatorController.AnimationClips.Length; i++) blobAnimationClipArray[i].MakeBlob(animatorController.AnimationClips[i], blobBuilder);
+            }
+        }
+        
+        public AnimationClipBlob GetAnimationClipBlob(int hashCode)
+        {
+            for (int i = 0; i < AnimationClipArray.Length; i++)
+            {
+                if (AnimationClipArray[i].Equals(hashCode))
+                {
+                    return AnimationClipArray[i];
+                }
+            }
+
+            return AnimationClipArray[0];
         }
     }
 
@@ -54,11 +75,14 @@ namespace Dots_Animator_System.Scripts
     {
         public FixedString64Bytes Name;
         public UnsafeList<AnimatorLayer> LayerAuthorings;
-
+        public UnsafeList<AnimationClip> AnimationClips;
+        
         public void Dispose()
         {
             foreach (var layer in LayerAuthorings) layer.Dispose();
+            foreach (var clip in AnimationClips) clip.Dispose();
             LayerAuthorings.Dispose();
+            AnimationClips.Dispose();
         }
     }
 }

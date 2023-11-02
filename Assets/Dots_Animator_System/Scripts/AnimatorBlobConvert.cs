@@ -37,6 +37,7 @@ namespace Dots_Animator_System.Scripts
                         Animator = blobReference,
                         LayerIndex = i,
                         LayerName = blobReference.Value.Layers[i].Name,
+                        LayerWeight = blobReference.Value.Layers[i].Weight,
                         
                         CurrenStateBlob = blobReference.Value.Layers[i].GetStateBlob(blobReference.Value.Layers[i].CurrentStateHashCode),
                     });
