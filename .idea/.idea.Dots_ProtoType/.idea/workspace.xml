@@ -5,7 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c3d14d85-42d4-4ed4-b97f-227699c389e6" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/StateMachine/Monster/System/SpawnMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/StateMachine/Monster/System/SpawnMonster.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/WarSimulGame/Game.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/WarSimulGame/Init.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/WarSimulGame/Init/Authoring.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/WarSimulGame/Init/Authoring/SpawnerAuthoring.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/WarSimulGame/Init/Authoring/SpawnerAuthoring.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/WarSimulGame/Init/Component.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/WarSimulGame/Init/Component/SpawnerComponent.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/WarSimulGame/Init/Component/SpawnerComponent.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Dots_ProtoType/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Dots_ProtoType/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +31,7 @@
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.entities@1.0.16/Unity.Entities.Editor/EditorResources.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.entities@1.0.16/Unity.Entities.Editor/VisualElementTemplate.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.entities@1.0.16/Unity.Entities/IComponentData.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.entities@1.0.16/Unity.Entities/SortingUtilities.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.entities@1.0.16/Unity.Entities/Stubs/Unity/Debug.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.entities@1.0.16/Unity.Entities/SystemState.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.entities@1.0.16/Unity.Entities/Types/Hash128.cs" root0="SKIP_HIGHLIGHTING" />
@@ -109,6 +118,8 @@
       <workItem from="1697688430897" duration="6162000" />
       <workItem from="1697962713056" duration="4742000" />
       <workItem from="1698076326758" duration="3781000" />
+      <workItem from="1698769776378" duration="117000" />
+      <workItem from="1698996934517" duration="1266000" />
     </task>
     <servers />
   </component>
