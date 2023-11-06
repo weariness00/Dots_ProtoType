@@ -19,7 +19,7 @@ namespace Dots_Animator_System.Scripts
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             
-            AddComponentObject(entity, new AnimatorManaged(){Animator = authoring});
+            // AddComponentObject(entity, new AnimatorManaged(){Animator = authoring});
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Dots_Animator_System.Scripts
                 {
                     blobAssetReferenceBuffer.Add(new AnimatorControllerBlobAssetReference()
                     {
-                        Animator = blobReference,
+                        AnimatorReference = blobReference,
                         LayerIndex = i,
                         LayerName = blobReference.Value.Layers[i].Name,
                         LayerWeight = blobReference.Value.Layers[i].Weight,

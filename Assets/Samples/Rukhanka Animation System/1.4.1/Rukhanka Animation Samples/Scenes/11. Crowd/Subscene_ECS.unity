@@ -154,16 +154,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabPool:
-  - {fileID: 7790345461537633948, guid: 0d37ad335420beb468bd21634bf42042, type: 3}
-  - {fileID: 5316387715516330986, guid: ec8da96f3323a014ab116a6e989795ba, type: 3}
-  - {fileID: 2482209122989208867, guid: a9e9815c69fa57a4cbed2b8cfecf9a78, type: 3}
-  - {fileID: 5070966296703802907, guid: 69af9e54a44a5e242985bda098b073e0, type: 3}
-  - {fileID: 7024311020378834574, guid: 959cd07919f57c24fa981f9a29ce5754, type: 3}
+  - {fileID: 2157301682639189278, guid: 21837e3874a5bc04893372a5e1c02de8, type: 3}
+  - {fileID: 6041582599695786081, guid: 4952313f7971b5948a7e916f4cc1b6f7, type: 3}
+  - {fileID: 8983240459888317339, guid: ac1b54cf79939754282748511f966985, type: 3}
   count: 100
   spawnRadius: 50
   spawnDelayInSeconds: 0
   spawnUntityObjects: 0
-  initialSpawn: 1
+  initialSpawn: 0
 --- !u!4 &1504423993
 Transform:
   m_ObjectHideFlags: 0

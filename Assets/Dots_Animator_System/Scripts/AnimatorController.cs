@@ -18,7 +18,7 @@ namespace Dots_Animator_System.Scripts
 
     public struct AnimatorControllerBlobAssetReference : IBufferElementData
     {
-        public BlobAssetReference<AnimatorControllerBlob> Animator;
+        public BlobAssetReference<AnimatorControllerBlob> AnimatorReference;
         public int LayerIndex;
         public FixedString128Bytes LayerName;
         public float LayerWeight;
@@ -55,19 +55,6 @@ namespace Dots_Animator_System.Scripts
                 var blobAnimationClipArray = blobBuilder.Allocate(ref this.AnimationClipArray, animatorController.AnimationClips.Length);
                 for (int i = 0; i < animatorController.AnimationClips.Length; i++) blobAnimationClipArray[i].MakeBlob(animatorController.AnimationClips[i], blobBuilder);
             }
-        }
-        
-        public AnimationClipBlob GetAnimationClipBlob(int hashCode)
-        {
-            for (int i = 0; i < AnimationClipArray.Length; i++)
-            {
-                if (AnimationClipArray[i].Equals(hashCode))
-                {
-                    return AnimationClipArray[i];
-                }
-            }
-
-            return AnimationClipArray[0];
         }
     }
 

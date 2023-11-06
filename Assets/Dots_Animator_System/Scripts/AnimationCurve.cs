@@ -14,13 +14,15 @@ namespace Dots_Animator_System.Scripts
 
     public struct AnimationCurveBlob
     {
-        public FixedString64Bytes PropertyName;
+        public FixedString128Bytes PropertyName;
+        public Entity BoneEntity;
 
         public BlobArray<Keyframe> KeyFrames;
 
         public void MakeBlob(AnimationCurve curve, BlobBuilder blobBuilder)
         {
             PropertyName = curve.PropertyName;
+            BoneEntity = curve.Bone;
 
             var keyFramesLength = curve.KeyFrames.Length;
             if (keyFramesLength > 0)
@@ -33,7 +35,7 @@ namespace Dots_Animator_System.Scripts
 
     public struct AnimationCurve : IDisposable
     {
-        public FixedString64Bytes PropertyName;
+        public FixedString128Bytes PropertyName;
         public Entity Bone;
 
         public UnsafeList<Keyframe> KeyFrames;

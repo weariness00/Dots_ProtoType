@@ -24,8 +24,22 @@ namespace Dots_Animator_System.Scripts
             foreach (var controller in controllerBuffer)
             {
                 if(controller.LayerWeight == 0) continue;
+
+                ref AnimationClipBlob clip = ref controller.AnimatorReference.Value.AnimationClipArray[0];
                 
-                Debug.Log(controller.Animator.Value.GetAnimationClipBlob(controller.CurrenStateBlob.AnimationClipHashCode).Name);
+                for (int i = 0; i < controller.AnimatorReference.Value.AnimationClipArray.Length; i++)
+                {
+                    if (controller.AnimatorReference.Value.AnimationClipArray[i].Equals(controller.CurrenStateBlob.AnimationClipHashCode))
+                    {
+                        clip = controller.AnimatorReference.Value.AnimationClipArray[i];
+                        break;
+                    }
+                }
+
+                for (int i = 0; i < clip.Curves.Length; i++)
+                {
+                    
+                }
             }
         }
     }

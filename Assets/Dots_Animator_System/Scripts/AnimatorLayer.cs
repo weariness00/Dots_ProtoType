@@ -47,19 +47,6 @@ namespace Dots_Animator_System.Scripts
 
             return GetStateBlob(DefaultStateHashCode);
         }
-
-        // public AnimationClipBlob GetAnimationClipBlob(int hashCode)
-        // {
-        //     for (int i = 0; i < AnimationClips.Length; i++)
-        //     {
-        //         if (AnimationClips[i].Equals(hashCode))
-        //         {
-        //             return AnimationClips[i];
-        //         }
-        //     }
-        //
-        //     return GetAnimationClipBlob(GetStateBlob(DefaultStateHashCode).AnimationClipHashCode);
-        // }
     }
 
     public struct AnimatorLayer : IDisposable
