@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab087824-e861-480e-9f2b-2dafa039b161" name="변경" comment="" />
+    <list default="true" id="ab087824-e861-480e-9f2b-2dafa039b161" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Dots_ProtoType/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Dots_ProtoType/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Gpu Animation/Animation Asset/GPU.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Gpu Animation/Animation Asset/GPU.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Gpu Animation/Scripts/GPUAnimationAsset.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Gpu Animation/Scripts/GPUAnimationAsset.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,10 +20,15 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3b24cc7fa9794ed8ab04312c53e6dedd172c00/5c/48db9ccc/RenderTexture.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3b24cc7fa9794ed8ab04312c53e6dedd172c00/99/ba3cd062/Texture2D.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fe7039efe678478d9c83e73bc6a6566d94b400/76/84eb0963/AssetDatabase.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fe7039efe678478d9c83e73bc6a6566d94b400/97/9f0616d1/InspectorElement.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.entities.graphics@1.0.16/Unity.Entities.Graphics/EntitiesGraphicsSystem.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.entities.graphics@1.0.16/Unity.Entities.Graphics/MaterialPropertyAttribute.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.entities.graphics@1.0.16/Unity.Entities.Graphics/SkinnedMeshRendererBaking.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.entities@1.0.16/Unity.Entities.Editor/Hierarchy/HierarchyWindow.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@14.0.8/Runtime/UniversalRenderPipeline.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.visualscripting@1.9.0/Runtime/VisualScripting.Core/Utilities/ComponentHolderProtocol.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -33,6 +43,8 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
+    "XThreadsFramesViewSplitterKey": "0.49537036",
+    "git-widget-placeholder": "Gpu__Aniamtion",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -66,10 +78,10 @@
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="Unity 에디터에 연결" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Unity 에디터에 연결" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="23408">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="23408" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -100,7 +112,8 @@
       <workItem from="1697030232014" duration="6918000" />
       <workItem from="1697108109866" duration="2344000" />
       <workItem from="1699274797563" duration="549000" />
-      <workItem from="1699349450178" duration="8175000" />
+      <workItem from="1699349450178" duration="8784000" />
+      <workItem from="1699429748514" duration="13541000" />
     </task>
     <servers />
   </component>
@@ -111,5 +124,24 @@
   <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Gpu Animation/Scripts/GPUAnimationAsset.cs</url>
+          <line>44</line>
+          <properties documentPath="C:\Users\USER\Desktop\Computer Associated\unity project\Dots_ProtoType\Assets\Gpu Animation\Scripts\GPUAnimationAsset.cs" initialLine="44" containingFunctionPresentation="메서드 'Bake'">
+            <startOffsets>
+              <option value="1522" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1611" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
