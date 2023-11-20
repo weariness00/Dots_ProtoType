@@ -17,3 +17,4 @@ MonoBehaviour:
   clips:
   - {fileID: 1827226128182048838, guid: 7814598c7ca357944afa5e9995401b6c, type: 3}
   - {fileID: 1827226128182048838, guid: 413d37373b4f9e54cba0de34d133fc12, type: 3}
+  shader: {fileID: -6465566751694194690, guid: 5c03ea8d268a7394696655cebbc6a9f1, type: 3}
