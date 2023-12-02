@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using Unity.Collections;
-using Unity.VisualScripting;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
-using UnityEngine.UIElements;
 
 namespace Gpu_Animation.Scripts
 {
@@ -15,33 +13,40 @@ namespace Gpu_Animation.Scripts
         public string path = "GPU Animation/Animation Asset";
         [ReadOnly] public GameObject Model;
         public AnimationClip[] clips;
+        public int TotalFrame = 0;
         public Shader shader;
 
         private List<Texture2D> _textures = new List<Texture2D>();
-        private int width = 0;
-        private int height = 0;
+
+        private void OnValidate()
+        {
+            TotalFrame = 0;
+            foreach (var clip in clips)
+                TotalFrame += (int)(clip.length * clip.frameRate);
+        }
 
         public void Bake()
         {
-            foreach (var clip in clips)
-                height += (int)(clip.length * clip.frameRate);
-            
-            var meshRenderers = Model.GetComponentsInChildren<MeshRenderer>();
-            if (meshRenderers.Length > 0)
-            {
-                var parentObject = new GameObject(name = Model.name);
-                foreach (var meshRenderer in meshRenderers)
-                {
-                    var newGO = Instantiate(meshRenderer.gameObject, parentObject.transform, true);
-                    var mesh = meshRenderer.GetComponent<MeshFilter>().sharedMesh;
-                    var material = ConvertShader(meshRenderer.sharedMaterial);
-                    MakeAnimationTexture(newGO, mesh, mesh.sharedMaterials[0]);
-                }
-                
-                PrefabUtility.SaveAsPrefabAsset(parentObject, $"Assets/{path}/Obj_{Model.name}.prefab");
-                DestroyImmediate(parentObject);
-                return;
-            }
+            // 디렉토리가 존재하지 않으면 생성
+            if (!Directory.Exists($"{Application.dataPath}/{path}/{Model.name}"))
+                Directory.CreateDirectory($"{Application.dataPath}/{path}/{Model.name}");
+
+            // var meshRenderers = Model.GetComponentsInChildren<MeshRenderer>();
+            // if (meshRenderers.Length > 0)
+            // {
+            //     var parentObject = new GameObject(name = Model.name);
+            //     foreach (var meshRenderer in meshRenderers)
+            //     {
+            //         var newGO = Instantiate(meshRenderer.gameObject, parentObject.transform, true);
+            //         var mesh = meshRenderer.GetComponent<MeshFilter>().sharedMesh;
+            //         var material = ConvertShader(meshRenderer.sharedMaterial);
+            //         MakeAnimationTexture(newGO, mesh);
+            //     }
+            //     
+            //     PrefabUtility.SaveAsPrefabAsset(parentObject, $"Assets/{path}/Obj_{Model.name}.prefab");
+            //     DestroyImmediate(parentObject);
+            //     return;
+            // }
             
             var skinnedMeshRenderers = Model.GetComponentsInChildren<SkinnedMeshRenderer>();
             if (skinnedMeshRenderers.Length > 0)
@@ -51,16 +56,21 @@ namespace Gpu_Animation.Scripts
                 {
                     var newGO = Instantiate(skinnedMeshRenderer.gameObject, parentObject.transform, true);
                     var skinned = newGO.GetComponent<SkinnedMeshRenderer>();
-                    MakeAnimationTexture(newGO, skinned.sharedMesh, skinned.sharedMaterials[0]);
+                    var material = ConvertShader(skinned.sharedMaterials[0]);
+                    var mesh = MakeMesh(skinned.sharedMesh);
+                    skinned.sharedMesh = mesh;
+                    skinned.sharedMaterials[0] = material;
+                    
+                    MakeAnimationTexture(newGO, skinned.sharedMesh);
                 }
                 
-                PrefabUtility.SaveAsPrefabAsset(parentObject, $"Assets/{path}/Obj_{Model.name}.prefab");
+                PrefabUtility.SaveAsPrefabAsset(parentObject, $"Assets/{path}/{Model.name}/Obj_{Model.name}.prefab");
                 DestroyImmediate(parentObject);
                 return;
             }
         }
 
-        void MakeAnimationTexture(GameObject meshGameObject, Mesh mesh, Material material)
+        void MakeAnimationTexture(GameObject meshGameObject, Mesh mesh)
         {
             if (SystemInfo.maxTextureSize < mesh.vertexCount)
             {
@@ -68,56 +78,51 @@ namespace Gpu_Animation.Scripts
                 return;
             }
             
-            width = mesh.vertexCount;
-            Camera camera = Camera.main;
-            RenderTexture rt = new RenderTexture(width, height, 24);
-            camera.targetTexture = rt;
-            RenderTexture.active = rt;
-            int sumFrame = 0;
+            Texture2D frameTexture = new Texture2D(mesh.vertexCount, TotalFrame, TextureFormat.RGBA32, false);
+            List<Color> colors = new List<Color>();
 
-            Texture2D frameTexture = new Texture2D(rt.width, rt.height, TextureFormat.RGBA32, false);
-
-            foreach (AnimationClip clip in clips)
+            float currentFrame = 0;
+            for (int clipCount = 0; clipCount < clips.Length; clipCount++)
             {
-                for (int frame = 0; frame < clip.length * clip.frameRate; frame += 1)
+                var clip = clips[clipCount];
+                
+                for (int frame = 0; frame < clip.frameRate; frame++)
                 {
-                    clip.SampleAnimation(meshGameObject, frame);
-
-                    // 프레임 렌더링
-                    camera.Render();
-
-                    // RenderTexture를 Texture2D로 변환
-                    frameTexture.ReadPixels(new Rect(0, frame + sumFrame, rt.width, frame + sumFrame + 1), 0,frame + sumFrame);
-                    frameTexture.Apply();
-
-                    // Clear the active RenderTexture
+                    clip.SampleAnimation(Model, currentFrame);
+                    for (int i = 0; i < mesh.vertexCount; i++)
+                    {
+                        float3 vertex = mesh.vertices[i];
+                        colors.Add(new Color(vertex.x, vertex.y, vertex.z));
+                    }
+                    currentFrame += clip.length / clip.frameRate;
                 }
-
-                sumFrame += (int)clip.length;
             }
             
-            // material.SetTexture("_Animation_Texture", frameTexture);
-            System.IO.File.WriteAllBytes($"Assets/{path}/RenderTexture_{Model.name}.png", frameTexture.EncodeToPNG());
+            frameTexture.SetPixels(0,0,mesh.vertexCount, TotalFrame, colors.ToArray());
+            frameTexture.Apply();
+            
+            System.IO.File.WriteAllBytes($"Assets/{path}/{Model.name}/RenderTexture_{meshGameObject.name}.png", frameTexture.EncodeToPNG());
 
             _textures.Add(frameTexture);
-            material = ConvertShader(material);
-            RenderTexture.active = null;
         }
 
-        Mesh MakeMseh(Mesh mesh)
+        Mesh MakeMesh(Mesh mesh)
         {
             var newMesh = new Mesh();
             newMesh.vertices = mesh.vertices;
             newMesh.triangles = mesh.triangles;
-            UnityEditor.AssetDatabase.CreateAsset(newMaterial, $"Assets/{path}/GPU_{material.name}.mat");
+            newMesh.uv = mesh.uv;
+            newMesh.normals = mesh.normals;
+            UnityEditor.AssetDatabase.CreateAsset(newMesh, $"Assets/{path}/{Model.name}/GPU_{mesh.name}.asset");
+            AssetDatabase.SaveAssets();
+            return newMesh;
         }
 
         Material ConvertShader(Material material)
         {
             Material newMaterial = new Material(material);
             newMaterial.shader = shader;
-            UnityEditor.AssetDatabase.CreateAsset(newMaterial, $"Assets/{path}/GPU_{material.name}.mat");
-
+            UnityEditor.AssetDatabase.CreateAsset(newMaterial, $"Assets/{path}/{Model.name}/GPU_{material.name}.mat");
             return newMaterial;
         }
     }
