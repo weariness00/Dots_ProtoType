@@ -22,7 +22,7 @@ namespace Gpu_Animation.Scripts
         {
             TotalFrame = 0;
             foreach (var clip in clips)
-                TotalFrame += (int)(clip.length * clip.frameRate);
+                TotalFrame += (int)(clip.frameRate);
         }
 
         public void Bake()
@@ -47,7 +47,7 @@ namespace Gpu_Animation.Scripts
             //     DestroyImmediate(parentObject);
             //     return;
             // }
-            
+
             var skinnedMeshRenderers = Model.GetComponentsInChildren<SkinnedMeshRenderer>();
             if (skinnedMeshRenderers.Length > 0)
             {
@@ -60,10 +60,10 @@ namespace Gpu_Animation.Scripts
                     var mesh = MakeMesh(skinned.sharedMesh);
                     skinned.sharedMesh = mesh;
                     skinned.sharedMaterials[0] = material;
-                    
+
                     MakeAnimationTexture(newGO, skinned.sharedMesh);
                 }
-                
+
                 PrefabUtility.SaveAsPrefabAsset(parentObject, $"Assets/{path}/{Model.name}/Obj_{Model.name}.prefab");
                 DestroyImmediate(parentObject);
                 return;
@@ -77,33 +77,54 @@ namespace Gpu_Animation.Scripts
                 Debug.LogWarning($"{SystemInfo.maxTextureSize}보다 버텍스 갯수가 더 많습니다.\nMeshName : {mesh.name}\nVertextCount : {mesh.vertexCount}");
                 return;
             }
-            
-            Texture2D frameTexture = new Texture2D(mesh.vertexCount, TotalFrame, TextureFormat.RGBA32, false);
-            List<Color> colors = new List<Color>();
 
-            float currentFrame = 0;
+            Texture2D vertexTexture = new Texture2D(mesh.vertexCount, TotalFrame, TextureFormat.RGBA32, false);
+            Texture2D uvTexture = new Texture2D(mesh.vertexCount, TotalFrame, TextureFormat.RGBA32, false);
+            Texture2D normalTexture = new Texture2D(mesh.vertexCount, TotalFrame, TextureFormat.RGBA32, false);
+            List<Color> vertexColors = new List<Color>();
+            List<Color> uvColors = new List<Color>();
+            List<Color> normalColors = new List<Color>();
+
             for (int clipCount = 0; clipCount < clips.Length; clipCount++)
             {
+                float currentFrame = 0;
                 var clip = clips[clipCount];
-                
+
                 for (int frame = 0; frame < clip.frameRate; frame++)
                 {
                     clip.SampleAnimation(Model, currentFrame);
                     for (int i = 0; i < mesh.vertexCount; i++)
                     {
                         float3 vertex = mesh.vertices[i];
-                        colors.Add(new Color(vertex.x, vertex.y, vertex.z));
+                        vertexColors.Add(new Color(vertex.x, vertex.y, vertex.z));
                     }
+
+                    for (int i = 0; i < mesh.uv.Length; i++)
+                    {
+                        float2 uv = mesh.uv[i];
+                        uvColors.Add(new Color(uv.x,uv.y, 1));
+                    }
+
+                    for (int i = 0; i < mesh.normals.Length; i++)
+                    {
+                        float3 normal = mesh.normals[i];
+                        normalColors.Add(new Color(normal.x, normal.y, normal.z));
+                    }
+
                     currentFrame += clip.length / clip.frameRate;
                 }
             }
-            
-            frameTexture.SetPixels(0,0,mesh.vertexCount, TotalFrame, colors.ToArray());
-            frameTexture.Apply();
-            
-            System.IO.File.WriteAllBytes($"Assets/{path}/{Model.name}/RenderTexture_{meshGameObject.name}.png", frameTexture.EncodeToPNG());
 
-            _textures.Add(frameTexture);
+            vertexTexture.SetPixels(0, 0, mesh.vertexCount, TotalFrame, vertexColors.ToArray());
+            uvTexture.SetPixels(0, 0, mesh.vertexCount, TotalFrame, uvColors.ToArray());
+            normalTexture.SetPixels(0, 0, mesh.vertexCount, TotalFrame, normalColors.ToArray());
+            vertexTexture.Apply();
+            uvTexture.Apply();
+            normalTexture.Apply();
+
+            System.IO.File.WriteAllBytes($"Assets/{path}/{Model.name}/VertexTexture_{meshGameObject.name}.png", vertexTexture.EncodeToPNG());
+            System.IO.File.WriteAllBytes($"Assets/{path}/{Model.name}/UVTexture_{meshGameObject.name}.png", uvTexture.EncodeToPNG());
+            System.IO.File.WriteAllBytes($"Assets/{path}/{Model.name}/NormalTexture_{meshGameObject.name}.png", normalTexture.EncodeToPNG());
         }
 
         Mesh MakeMesh(Mesh mesh)
